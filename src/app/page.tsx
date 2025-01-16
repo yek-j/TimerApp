@@ -1,12 +1,50 @@
 'use client';
 
 import { displayTime } from "@/components/timer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlayIcon, PauseIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 
 export default function Home() {
-  const [time, setTime] = useState(1500);
+  const [targetTime, setTargetTime] = useState<number | null>(null);
+  const [time, setTime] = useState(1500);  // 25분
   const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let frameId: number;
+    if(isRunning && targetTime) {
+      const runningTimer = () => {
+        const now = Date.now();
+        const newTime = Math.ceil((targetTime - now) / 1000);
+
+        if(newTime <= 0) {
+          setIsRunning(false);
+          setTime(0);
+          return;
+        }
+
+        setTime(newTime);
+        frameId = requestAnimationFrame(runningTimer);
+      };
+
+      frameId = requestAnimationFrame(runningTimer);
+    }
+
+    return () => {
+      if(frameId) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }, [isRunning, targetTime])
+
+  const toggleBtn = () => {
+    if(!isRunning) {
+      setTargetTime(Date.now() + (time * 1000));
+      setIsRunning(true);
+    } else {
+      setIsRunning(false);
+      setTargetTime(null);
+    }
+  }
 
   const addFiveMin = () => {
     if ((time + 300) > 3600) setTime(3600);
@@ -15,8 +53,14 @@ export default function Home() {
 
   const subFiveMin = () => {
     if (time === 0) return;
-    else if ((time - 300) < 0) { setTime(0) }
+    else if ((time - 300) < 300) { setTime(300) } // 최소 5분
     else setTime(time - 300)
+  }
+
+  const resetTimer = () => {
+    setIsRunning(false);
+    setTargetTime(null);
+    setTime(1500);
   }
 
   return (
@@ -31,7 +75,7 @@ export default function Home() {
         <div className="flex space-x-4">
           <button
             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            onClick={()=>setIsRunning(!isRunning)}
+            onClick={toggleBtn}
           >
             {isRunning ? (
               <PauseIcon className="h-8 w-8 text-sky-700"/>
@@ -39,7 +83,9 @@ export default function Home() {
               <PlayIcon className="h-8 w-8 text-sky-700"/>
             )}
           </button>
-          <button>
+          <button
+            onClick={resetTimer}
+          >
             <ArrowPathIcon className="h-8 w-8 text-sky-700"/>
           </button>
         </div>
