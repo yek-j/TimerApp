@@ -1,6 +1,6 @@
 'use client';
 
-import { displayTime } from "@/components/timer";
+import { displayTime, notifyTimer, requestNotificationPermission } from "@/components/timer";
 import { useEffect, useState } from "react";
 import { PlayIcon, PauseIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 
@@ -8,6 +8,10 @@ export default function Home() {
   const [targetTime, setTargetTime] = useState<number | null>(null);
   const [time, setTime] = useState(1500);  // 25분
   const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    requestNotificationPermission();
+  },[]);
 
   useEffect(() => {
     let frameId: number;
@@ -19,6 +23,7 @@ export default function Home() {
         if(newTime <= 0) {
           setIsRunning(false);
           setTime(0);
+          notifyTimer();
           return;
         }
 
