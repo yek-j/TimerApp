@@ -1,6 +1,6 @@
 'use client';
 
-import { displayTime, notifyTimer, requestNotificationPermission } from "@/components/Timer/timerUtils";
+import { displayTime, notifyTimer, requestNotificationPermission } from "@/utils/timer";
 import { useEffect, useState } from "react";
 import { PlayIcon, PauseIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 

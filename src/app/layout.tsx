@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import './globals.css'
+import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
   title: "Timer",
@@ -14,7 +15,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <div className="flex min-h-screen bg-gray-50">
+          <Sidebar/>
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
