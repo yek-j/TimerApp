@@ -1,22 +1,43 @@
+import Link from "next/link";
+
 export default function Sidebar () {
-    
+    const session = null;
     return (
       <div className="flex min-h-screen bg-gray-50">
         <aside className="w-64 bg-white border-r border-gray-200">
           {/* 로고 영역 */}
           <div className="p-4 border-b border-gray-200">
-            <h1 className="text-xl font-bold text-sky-700">Timer</h1>
+            <Link href="/">
+              <h1 className="text-xl font-bold text-sky-700">Timer</h1>
+            </Link>
           </div>
   
-          {/* 사용자 프로필, 로그인/회원가입 영역 */}
+          {/* 사용자 프로필, 로그인 버튼튼 영역 */}
           <div className="p-4 border-b border-gray-200">
-            <div className="flex items-center space-x-3">
-              <div>
-                <p className="font-medium">사용자명</p>
-                <p className="text-sm text-gray-500">user@email.com</p>
-              </div>
+        {session ? (
+          // 로그인된 경우 - 프로필 표시
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
+              <span className="text-sky-700 font-medium">
+                사용자명 
+              </span>
+            </div>
+            <div>
+              <p className="font-medium">사용자 이메일</p>
             </div>
           </div>
+        ) : (
+          // 로그인되지 않은 경우 - 로그인/회원가입 버튼
+          <div className="w-full space-y-2">
+            <Link 
+              href="/login"
+              className="block w-full py-2 px-4 bg-sky-700 text-white rounded-lg hover:bg-sky-800 transition-colors text-center"
+            >
+              로그인
+            </Link>
+          </div>
+        )}
+      </div>
   
           {/* 그룹 현황 */}
           <div className="p-4">
