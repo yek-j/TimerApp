@@ -1,7 +1,28 @@
+'use client';
+
+import { getUser, logOut } from "@/utils/supabase/auth";
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Sidebar () {
-    const session = null;
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+      getUser().then(user => {
+        setUser(user);
+      });
+    }, []);
+
+    const handleLogout = async () => {
+      const error = await logOut();
+      if(error) {
+        console.error(error);
+      } else {
+        setUser(null);
+      }
+    }
+
     return (
       <div className="flex min-h-screen bg-gray-50">
         <aside className="w-64 bg-white border-r border-gray-200">
@@ -14,17 +35,30 @@ export default function Sidebar () {
   
           {/* 사용자 프로필, 로그인 버튼튼 영역 */}
           <div className="p-4 border-b border-gray-200">
-        {session ? (
+        {user ? (
           // 로그인된 경우 - 프로필 표시
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
-              <span className="text-sky-700 font-medium">
-                사용자명 
-              </span>
-            </div>
-            <div>
-              <p className="font-medium">사용자 이메일</p>
-            </div>
+          <div className="p-4 border-gray-200">
+              <div className="flex flex-col space-y-3">
+                  {/* 유저 정보 */}
+                  <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center">
+                          <span className="text-sky-700 font-medium">
+                              {user.user_metadata.name}
+                          </span>
+                      </div>
+                      <div className="flex flex-col">
+                          <span className="font-medium">{user.email}</span>
+                      </div>
+                  </div>
+                  
+                  {/* 로그아웃 버튼 */}
+                  <button
+                      onClick={handleLogout}
+                      className="w-full py-2 px-4 text-sm text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                      로그아웃
+                  </button>
+              </div>
           </div>
         ) : (
           // 로그인되지 않은 경우 - 로그인/회원가입 버튼
