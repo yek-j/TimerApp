@@ -1,18 +1,28 @@
 'use client';
 
-import { getUser, logOut } from "@/utils/supabase/auth";
+import { logOut } from "@/utils/supabase/auth";
+import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Sidebar () {
     const [user, setUser] = useState<User | null>(null);
+    const pathname = usePathname();
 
     useEffect(() => {
-      getUser().then(user => {
-        setUser(user);
+      const supabase = createClient();
+
+      // 인증 상태 변경 구독
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user ?? null);
       });
-    }, []);
+
+      return () => subscription.unsubscribe();
+    }, [pathname]);
 
     const handleLogout = async () => {
       const error = await logOut();
