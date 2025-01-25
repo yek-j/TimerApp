@@ -69,7 +69,7 @@ export default function Timer() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 space-y-8">
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
       {/** 타이머 부분 */}
       <div className="text-8xl font-bold">
         {displayTime(time)}
