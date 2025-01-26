@@ -1,31 +1,15 @@
 'use client';
 
-import { logOut } from "@/utils/supabase/auth";
-import { createClient } from "@/utils/supabase/client";
+import { logOut } from "@/utils/auth";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import StatsModal from "./StatsModal";
+import { UserContext } from "@/contexts/UserContext";
 
 export default function Sidebar () {
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser } = useContext(UserContext)!;
     const [showStats, setShowStats] = useState(false);
-    const pathname = usePathname();
-
-    useEffect(() => {
-      const supabase = createClient();
-
-      // 인증 상태 변경 구독
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null);
-      });
-
-      return () => subscription.unsubscribe();
-    }, [pathname]);
 
     const handleLogout = async () => {
       const error = await logOut();
@@ -60,7 +44,7 @@ export default function Sidebar () {
                   <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center">
                           <span className="text-sky-700 font-medium">
-                              {user.user_metadata.name}
+                              {user.name}
                           </span>
                       </div>
                       <div className="flex flex-col">

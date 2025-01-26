@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import './globals.css'
 import LayoutWrapper from "@/components/LayoutWrapper";
+import { UserProvider } from "@/contexts/UserContext";
 
 export const metadata: Metadata = {
   title: "Timer",
@@ -16,11 +17,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="">
-          <LayoutWrapper>
-            <main className="flex-1">
-              {children}
-            </main>
-          </LayoutWrapper>
+          <UserProvider>
+            <LayoutWrapper>
+              <main className="flex-1">
+                {children}
+              </main>
+            </LayoutWrapper>
+          </UserProvider>
         </div>
       </body>
     </html>
