@@ -1,3 +1,6 @@
+import { CreateTimeRecord } from "@/types/time";
+import { createClient } from "./supabase/client";
+
 export const displayTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSec = seconds % 60;
@@ -25,3 +28,14 @@ export const notifyTimer = () => {
   }  
 }
 
+export const recordTime = async (record: CreateTimeRecord) => {
+  const supabase = createClient();
+  const result = await supabase.from('timer_records').insert({
+    user_id: record.user_id,
+    total_seconds: record.total_second
+  });
+
+  if(result.error) {
+    console.error(result.error);
+  }
+}

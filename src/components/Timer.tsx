@@ -1,13 +1,17 @@
 'use client';
 
-import { displayTime, notifyTimer, requestNotificationPermission } from "@/utils/timer";
-import { useEffect, useState } from "react";
+import { displayTime, notifyTimer, recordTime, requestNotificationPermission } from "@/utils/timer";
+import { useContext, useEffect, useState } from "react";
 import { PlayIcon, PauseIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
+import { UserContext } from "@/contexts/UserContext";
+
 
 export default function Timer() {
-    const [targetTime, setTargetTime] = useState<number | null>(null);
+  const [targetTime, setTargetTime] = useState<number | null>(null);
   const [time, setTime] = useState(1500);  // 25분
   const [isRunning, setIsRunning] = useState(false);
+  const [saveTime, setSaveTime] = useState(1500);
+  const {user} = useContext(UserContext)!;
 
   useEffect(() => {
     requestNotificationPermission();
@@ -22,8 +26,18 @@ export default function Timer() {
 
         if(newTime <= 0) {
           setIsRunning(false);
-          setTime(0);
           notifyTimer();
+
+          if(user) {
+            recordTime({
+              user_id: user.id,
+              total_second: saveTime
+            });
+          }
+
+          // 시간 초기화
+          setTime(0);
+          setSaveTime(0);
           return;
         }
 
@@ -39,7 +53,7 @@ export default function Timer() {
         cancelAnimationFrame(frameId);
       }
     };
-  }, [isRunning, targetTime])
+  }, [isRunning, saveTime, targetTime, user])
 
   const toggleBtn = () => {
     if(!isRunning) {
@@ -54,18 +68,21 @@ export default function Timer() {
   const addFiveMin = () => {
     if ((time + 300) > 3600) setTime(3600);
     else setTime(time + 300);
+    setSaveTime(time);
   }
 
   const subFiveMin = () => {
     if (time === 0) return;
     else if ((time - 300) < 300) { setTime(300) } // 최소 5분
     else setTime(time - 300)
+    setSaveTime(time);
   }
 
   const resetTimer = () => {
     setIsRunning(false);
     setTargetTime(null);
     setTime(1500);
+    setSaveTime(1500);
   }
 
   return (
