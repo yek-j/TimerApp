@@ -3,13 +3,26 @@
 import { logOut } from "@/utils/auth";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import StatsModal from "./StatsModal";
 import { UserContext } from "@/contexts/UserContext";
+import { displayDailyTime } from "@/utils/timer";
 
 export default function Sidebar () {
     const { user, setUser } = useContext(UserContext)!;
     const [showStats, setShowStats] = useState(false);
+    const [todayTime, setTodayTime] = useState("--시 --분");
+
+    useEffect(() => {
+      if(user) {
+        const dispalyData = async () => {
+          const today = await displayDailyTime(user.id);
+          setTodayTime(today);
+        }
+        
+        dispalyData();
+      }
+    }, [user])
 
     const handleLogout = async () => {
       const error = await logOut();
@@ -85,7 +98,9 @@ export default function Sidebar () {
               <ChartBarIcon className="h-5 w-5 text-gray-500" />
             </button>
           </div>
-          <div className="text-2xl font-bold text-sky-700">2시간 30분</div>
+          {user ? (<div className="text-2xl font-bold text-sky-700">{todayTime}</div>) : (
+            <div className="text-2xl font-bold text-sky-700"> 로그인 시 기록 </div>
+          )}
         </div>
         {/* 그룹 현황 */}
         <div className="p-4">
