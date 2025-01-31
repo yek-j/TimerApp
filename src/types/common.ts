@@ -8,3 +8,8 @@ export interface User {
     email: string;
     name: string | null;
 }
+
+export interface UserContextType {
+    user: User | null;
+    setUser: (user: User | null) => void;
+}

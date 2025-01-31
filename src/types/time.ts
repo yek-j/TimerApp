@@ -9,3 +9,8 @@ export interface TimeRecord {
     study_date: string;
     total_seconds: number;
 }
+
+export interface TimeContextType {
+    todayTime: string;
+    updateTodayTime: () => Promise<void>;
+};

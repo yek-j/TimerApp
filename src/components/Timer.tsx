@@ -1,9 +1,12 @@
 'use client';
 
-import { displayTime, notifyTimer, recordTime, requestNotificationPermission } from "@/utils/timer";
+import { displayTime, notifyTimer, requestNotificationPermission } from "@/utils/timer";
 import { useContext, useEffect, useState } from "react";
 import { PlayIcon, PauseIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 import { UserContext } from "@/contexts/UserContext";
+import { createClient } from "@/utils/supabase/client";
+import { CreateTimeRecord } from "@/types/time";
+import { TimeContext } from "@/contexts/TimeContext";
 
 
 export default function Timer() {
@@ -11,13 +14,28 @@ export default function Timer() {
   const [time, setTime] = useState(1500);  // 25분
   const [isRunning, setIsRunning] = useState(false);
   const [saveTime, setSaveTime] = useState(1500);
-  const {user} = useContext(UserContext)!;
+  const {user} = useContext(UserContext);
+  const { updateTodayTime } = useContext(TimeContext);
 
   useEffect(() => {
     requestNotificationPermission();
   },[]);
 
   useEffect(() => {
+    const recordTime = async (record: CreateTimeRecord) => {
+      const supabase = createClient();
+      const result = await supabase.from('timer_records').insert({
+        user_id: record.user_id,
+        total_seconds: record.total_second
+      });
+    
+      if(result.error) {
+        console.error(result.error);
+      } else {
+        updateTodayTime();
+      }
+    }
+
     let frameId: number;
     if(isRunning && targetTime) {
       const runningTimer = () => {
@@ -29,6 +47,7 @@ export default function Timer() {
           notifyTimer();
 
           if(user) {
+            
             recordTime({
               user_id: user.id,
               total_second: saveTime
@@ -53,7 +72,8 @@ export default function Timer() {
         cancelAnimationFrame(frameId);
       }
     };
-  }, [isRunning, saveTime, targetTime, user])
+  }, [isRunning, saveTime, targetTime, user, updateTodayTime])
+  
 
   const toggleBtn = () => {
     if(!isRunning) {
@@ -84,7 +104,7 @@ export default function Timer() {
     setTime(1500);
     setSaveTime(1500);
   }
-
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
       {/** 타이머 부분 */}

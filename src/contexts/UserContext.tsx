@@ -1,15 +1,17 @@
 'use client';
 
-import { User } from "@/types/common";
+import { User, UserContextType } from "@/types/common";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import { usePathname } from "next/navigation";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-export const UserContext = createContext<{
-    user: User | null;
-    setUser: (user: User | null) => void;
-} | undefined>(undefined);
+const initUserContext: UserContextType = {
+    user: null,
+    setUser: () => {}
+};
+
+export const UserContext = createContext<UserContextType>(initUserContext);
 
 export const mappingUser = (supabaseUser: SupabaseUser): User | null => {
     if(!supabaseUser.email || !supabaseUser.user_metadata?.name) {

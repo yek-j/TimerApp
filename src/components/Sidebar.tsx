@@ -6,23 +6,18 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import StatsModal from "./StatsModal";
 import { UserContext } from "@/contexts/UserContext";
-import { displayDailyTime } from "@/utils/timer";
+import { TimeContext } from "@/contexts/TimeContext";
 
 export default function Sidebar () {
-    const { user, setUser } = useContext(UserContext)!;
+    const { user, setUser } = useContext(UserContext);
+    const { todayTime, updateTodayTime } = useContext(TimeContext);
     const [showStats, setShowStats] = useState(false);
-    const [todayTime, setTodayTime] = useState("--시 --분");
 
     useEffect(() => {
       if(user) {
-        const dispalyData = async () => {
-          const today = await displayDailyTime(user.id);
-          setTodayTime(today);
-        }
-        
-        dispalyData();
+        updateTodayTime();
       }
-    }, [user])
+    }, [updateTodayTime, user])
 
     const handleLogout = async () => {
       const error = await logOut();
