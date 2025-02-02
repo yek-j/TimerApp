@@ -21,6 +21,7 @@
 - Next.js 15
 - TailwindCSS
 - Heroicons
+- Recharts
 
 ### 2.2 Backend/Database
 - Supabase

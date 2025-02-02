@@ -51,6 +51,12 @@ export const displayDailyTime = async (user_id: string) => {
   }
 
   const minutes = Math.floor(seconds / 60);
+  const strTime = formatTime(minutes);
+
+  return strTime;
+}
+
+export const formatTime = (minutes: number) => {
   const hours = Math.floor(minutes / 60);
   const remainingMin = minutes % 60;
 

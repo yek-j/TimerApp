@@ -1,9 +1,28 @@
 import { ModalProps } from "@/types/common";
 import { XMarkIcon } from "@heroicons/react/16/solid";
+import TimeChart from "./TimeChart";
+import { getChartData } from "@/utils/chart";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "@/contexts/UserContext";
+import { Period, TimeData } from "@/types/time";
 
 export default function StatsModal({ show, onClose }: ModalProps) {
+  const { user } = useContext(UserContext);
+  const [period, setPeriod] = useState<Period>('weekly');
+  const [data, setData] = useState<TimeData[]>([]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if(!user || !show) return;
+      const result = await getChartData(period, user.id)
+      if(result) {
+        setData(result);
+      }
+    }
+    fetchData();
+  }, [period, user, show])
+  
     if(!show) return null;
-
     return (
         <div 
           className="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50"
@@ -23,13 +42,36 @@ export default function StatsModal({ show, onClose }: ModalProps) {
               </button>
             </div>
             <div className="space-x-2">
-              <button className="px-3 py-1.5 bg-sky-100 text-sky-700 rounded-lg">일간</button>
-              <button className="px-3 py-1.5 hover:bg-gray-100 rounded-lg">주간</button>
-              <button className="px-3 py-1.5 hover:bg-gray-100 rounded-lg">월간</button>
-              <button className="px-3 py-1.5 hover:bg-gray-100 rounded-lg">연간</button>
+              <button 
+                className={`px-3 py-1.5 rounded-lg ${
+                  period === 'weekly' ? 'bg-sky-100 text-sky-700' : 'hover:bg-gray-100'
+                }`}
+                onClick={() => setPeriod('weekly')}  
+              >
+                주간
+              </button>
+              <button 
+                className={`px-3 py-1.5 rounded-lg ${
+                  period === 'monthly' ? 'bg-sky-100 text-sky-700' : 'hover:bg-gray-100'
+                }`}
+                onClick={() => setPeriod('monthly')}  
+              >
+                월간
+              </button>
+              <button 
+                className={`px-3 py-1.5 rounded-lg ${
+                  period === 'yearly' ? 'bg-sky-100 text-sky-700' : 'hover:bg-gray-100'
+                }`}
+                onClick={() => setPeriod('yearly')}  
+              >
+                연간
+              </button>
             </div>
             <div className="mt-4">
-              {/* 여기에 선택된 기간의 통계 데이터 표시 */}
+              <TimeChart
+                data={data}
+                period={period}
+              />
             </div>
           </div>
         </div>

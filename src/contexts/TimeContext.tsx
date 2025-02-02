@@ -17,10 +17,8 @@ export const TimeProvider = ({ children }: {children: ReactNode}) => {
   const { user } = useContext(UserContext); // 기존 user context 사용
 
   const updateTodayTime = async () => {
-    console.log(user);
     if (!user) return;
     const today = await displayDailyTime(user.id);
-    console.log(today);
     setTodayTime(today);
   };
 
