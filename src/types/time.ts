@@ -15,16 +15,25 @@ export interface TimeContextType {
     updateTodayTime: () => Promise<void>;
 };
 
-export interface TimeData {
-    day?: string;    // 주간
-    date?: string;   // 월간
-    month?: string;  // 연간
+export interface BaseTimeData {
     minutes: number;
+}
+
+export interface WeeklyTimeData extends BaseTimeData{
+    day: string;
+}
+
+export interface MonthlyTimeData extends BaseTimeData{
+    date: string;
+}
+
+export interface YearlyTimeData extends BaseTimeData{
+    month: string;
 }
 
 export type Period = 'weekly' | 'monthly' | 'yearly';
 
 export interface ChartProps {
-    data: TimeData[];
+    data: BaseTimeData[];
     period: Period;
 }

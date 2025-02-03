@@ -4,12 +4,12 @@ import TimeChart from "./TimeChart";
 import { getChartData } from "@/utils/chart";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
-import { Period, TimeData } from "@/types/time";
+import { Period, BaseTimeData } from "@/types/time";
 
 export default function StatsModal({ show, onClose }: ModalProps) {
   const { user } = useContext(UserContext);
   const [period, setPeriod] = useState<Period>('weekly');
-  const [data, setData] = useState<TimeData[]>([]);
+  const [data, setData] = useState<BaseTimeData[]>([]);
   
   useEffect(() => {
     const fetchData = async () => {

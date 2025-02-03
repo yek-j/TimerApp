@@ -13,7 +13,7 @@
     - 로그인/회원가입
     - 개인별 학습 통계
 - 통계 기능
-    - 로그인 한 사용자의 누적된 타이머를 일,주,월,연간 별로 통계
+    - 로그인 한 사용자의 누적된 타이머를 주,월,연간 별로 통계
 
 ## 2. 기술 스택
 
@@ -29,6 +29,8 @@
     - Database
 
 ### 2.3 Database Schema 
+- users
+- timer_records
 
 #### Table Structure
 ![Timer Table Structure](./image/schema.png)
