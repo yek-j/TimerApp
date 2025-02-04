@@ -31,6 +31,8 @@
 ### 2.3 Database Schema 
 - users
 - timer_records
+- groups
+- group_members
 
 #### Table Structure
 ![Timer Table Structure](./image/schema.png)

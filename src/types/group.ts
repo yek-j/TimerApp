@@ -1,0 +1,1 @@
+export type NewGroupStep = 'none' | 'create' | 'join';

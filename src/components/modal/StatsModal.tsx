@@ -1,6 +1,6 @@
 import { ModalProps } from "@/types/common";
 import { XMarkIcon } from "@heroicons/react/16/solid";
-import TimeChart from "./TimeChart";
+import TimeChart from "../TimeChart";
 import { getChartData } from "@/utils/chart";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
