@@ -47,7 +47,10 @@ export default function NewGroupModal({ show, onClose }: ModalProps) {
                 
             </div>)}
             {selectStep === 'create' && (
-                <CreateGroup />
+                <CreateGroup 
+                    onBack={() => setSelectStep('none')}
+                    onClose={onClose}
+                />
             )}
             {selectStep === 'join' && (
                 <JoinGroup />

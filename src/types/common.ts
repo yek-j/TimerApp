@@ -3,6 +3,11 @@ export interface ModalProps {
     onClose: () => void;
 }
 
+export interface NewGroupModalProps {
+    onBack: () => void;
+    onClose: () => void;
+}
+
 export interface User {
     id: string,
     email: string;
