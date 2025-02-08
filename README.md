@@ -12,6 +12,7 @@
 - 사용자 관리
     - 로그인/회원가입
     - 개인별 학습 통계
+    - 회원 탈퇴
 - 통계 기능
     - 로그인 한 사용자의 누적된 타이머를 주,월,연간 별로 통계
 
@@ -31,8 +32,6 @@
 ### 2.3 Database Schema 
 - users
 - timer_records
-- groups
-- group_members
 
 #### Table Structure
 ![Timer Table Structure](./image/schema.png)

@@ -1,7 +1,7 @@
 'use client';
 
 import { logOut } from "@/utils/auth";
-import { ChartBarIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { ChartBarIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import StatsModal from "./modal/StatsModal";
@@ -9,6 +9,9 @@ import { UserContext } from "@/contexts/UserContext";
 import { TimeContext } from "@/contexts/TimeContext";
 import NewGroupModal from "./modal/NewGroupModal";
 import ManageGroupModal from "./modal/ManageGroupModal";
+import { DeleteAccount } from "./DeleteButton";
+//import { getGroup } from "@/utils/group";
+//import { MyGroup } from "@/types/group";
 
 export default function Sidebar () {
     const { user, setUser } = useContext(UserContext);
@@ -18,15 +21,22 @@ export default function Sidebar () {
     const [showNewGroup, setShowNewGroup] = useState(false);
     const [showManageGroup, setShowManageGroup] = useState(false);
 
-    const [hasGroup, setHasGroup] = useState(false);
-    
-    
+    //const [hasGroup, setHasGroup] = useState<MyGroup | null>(null);
+
+    // useEffect(() => {
+    //   if(user) {
+    //     getGroup(user.id)
+    //     .then(data => {
+    //       if(data) {
+    //         setHasGroup(data);
+    //       }
+    //     })
+    //   }
+    // },[user]);
 
     useEffect(() => {
       if(user) {
         updateTodayTime();
-        // hasGroup 가져오기
-        setHasGroup(false);
       }
     }, [updateTodayTime, user])
 
@@ -39,13 +49,13 @@ export default function Sidebar () {
       }
     }
 
-    const handleGroupAction = () => {
+    /*const handleGroupAction = () => {
       if(hasGroup) {
         setShowManageGroup(true);
       } else {
         setShowNewGroup(true);
       }
-    }
+    } */
 
     return (
       <div className="flex min-h-screen bg-gray-50">
@@ -124,19 +134,17 @@ export default function Sidebar () {
             <div className="text-2xl font-bold text-sky-700"> 로그인 시 기록 </div>
           )}
         </div>
-        {/* 그룹 현황 */}
-        {user && (<div>
+        {user && <DeleteAccount/>}
+        {/* {user && (<div>
           <div className="p-4">
               <h2 className="text-sm font-medium text-gray-500 mb-3">그룹 현황</h2>
               
               <div className="space-y-3">
-                {/* 그룹 멤버 목록 */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 rounded-full bg-green-500"></div>
                     <span>사용자</span>
                   </div>
-                  <span className="text-sm text-gray-500">시간표시</span>
                 </div>
               </div>
             </div><div className="absolute bottom-0 w-64 p-4 border-t border-gray-200">
@@ -148,7 +156,7 @@ export default function Sidebar () {
                   {hasGroup ? "그룹 관리" : "그룹 참여하기"}
                 </button>
               </div>
-          </div>)}
+          </div>)} */}
         </aside>
     </div>
     );
